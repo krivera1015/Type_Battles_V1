@@ -1,0 +1,23 @@
+.login-container {
+  height: 75vh;
+  text-align: center;
+  height: 200px;
+  width: 400px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-top: -100px;
+  margin-left: -200px;
+}
+
+#type-racer-bar {
+  height: 15vh;
+  background: red;
+  justify-content: space-around;
+  align-items: center;
+  text-align: center;
+}
+
+body {
+  margin: 0;
+}
