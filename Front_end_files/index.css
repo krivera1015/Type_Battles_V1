@@ -18,6 +18,13 @@
   text-align: center;
 }
 
+#logo{
+  display:block;
+  padding: 50px;
+  font-size: 50px;
+  font-weight:bold
+}
 body {
+  background-image: url('Typing-background.jpg');
   margin: 0;
 }
