@@ -2,7 +2,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 //login fields created
   const loginContainer = document.querySelector(".login-container")
-  const input = document.createElement("input")
 
   loginContainer.innerHTML =`
   <form>
@@ -15,12 +14,12 @@ document.addEventListener("DOMContentLoaded", () => {
   loginContainer.addEventListener('submit', (e) => {
     e.preventDefault()
     const empt = e.target["username"].value;
-    console.log(e.target)
-    if (empt == ""){
+    if (empt === ""){
       alert("No Username Provided");
       return false;
     }else{
       loginContainer.remove()
+      gamePage()
     }
   })
 })
