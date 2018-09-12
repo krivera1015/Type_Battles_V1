@@ -24,6 +24,17 @@
   font-size: 50px;
   font-weight:bold
 }
+
+#green {
+  background-color: green
+}
+#temp-green {
+  background-color: green
+}
+
+#temp-red {
+  background-color: red
+}
 body {
   background-image: url('Typing-background.jpg');
   margin: 0;
