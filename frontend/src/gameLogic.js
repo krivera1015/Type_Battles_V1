@@ -19,11 +19,9 @@ function gameLogic(snippet) {
 
     //TODO: refactor this!
     userInput.onkeyup = (event) => {
-        if (event.target.tagName === 'TEXTAREA' && alphanumericFilter()) {
-            
+        if (alphanumericFilter()) {
 
             console.log(userInput.value.slice(-1), focusedChar)
-
             if (event.code === "Backspace") {
                 backspace()
             }
@@ -77,6 +75,7 @@ function gameLogic(snippet) {
         tmpGreenNode.innerText = tmpGreenNode.innerText + firstChar
 
         if (newWord === "") {
+            tmpGreenNode.innerText += " "
             splitSnippet.shift()
         }
         else {
