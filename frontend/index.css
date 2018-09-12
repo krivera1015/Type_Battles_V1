@@ -10,6 +10,14 @@
   margin-left: -200px;
 }
 
+#green {
+  background-color: green
+}
+
+#red {
+  background-color: red
+}
+
 #type-racer-bar {
   height: 15vh;
   background: red;

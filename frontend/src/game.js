@@ -14,13 +14,13 @@ function gamePage() {
         .then(obj => {
             snippet = get_random(obj.items.map(book => (book.searchInfo.textSnippet)))
 
-            playPage.innerHTML = 
+            playPage.innerHTML =
                 `
                 <div id ="book-image">
                     <img src=book.volumeInfo.imageLinks.small>
                 </div>
                     <div id="snippet-box">
-                    <p id="snippet"><span id="green"></span><span id="red"></span>${snippet}</p>
+                    <p><span id="green"></span><span id="red"></span><span id="snippet">${snippet}</span></p>
                 </div>
                 <div id="textArea">
                     <textArea placeholder="Get, set ... TYPE"rows="8" cols="100"></textArea>
@@ -32,15 +32,27 @@ function gamePage() {
 
 function gameLogic()    {
     document.body.onkeyup = (event) => {
-            if (event.target.tagName === 'TEXTAREA') {
-                console.log(snippet.match(new RegExp(`^${event.target.value}`)))
-                let match = snippet.match(new RegExp(`^${event.target.value}`))[0]
-
-                // if (event.code === "Space")  {
-                //     event.target.value = ""
-                // }
+            const green = document.querySelector('#green')
+            const red = document.querySelector('#red')
+            const snippetSpan = document.querySelector('#snippet')
+            if (event.target.tagName === 'TEXTAREA' && !["Shift", "CapsLock"].includes(event.key)) {
+                const matchArr = snippet.match(new RegExp(`^${event.target.value}`))
+                const match = matchArr ? matchArr[0] : null
+                if (match) {
+                  green.innerText += match.slice(green.innerText.length)
+                  snippetSpan.innerText = snippet.slice(match.length)
+                  console.log(match);
+                  // snippet = snippet.slice(0, match.length - 1)
+                  // snippetSpan.innerText = snippetSpan.innerText.slice(match.length)
+                } else {
+                  red.innerText = snippet[green.innerText.length + red.innerHTML.length]
+                  snippetSpan.innerText = snippet.slice(green.innerText.length + red.innerText.length)
+                }
             }
         }
 }
 
 //getting snippet into letters that will be compared
+// if (event.code === "Space")  {
+//     event.target.value = ""
+// }
