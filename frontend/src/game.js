@@ -6,7 +6,7 @@ get_random = function (list) {
 }
 
 let snippet = ''
-let splitSnippet = ''
+
 
 //getting snippets and appending to gamePage
 function gamePage() {
@@ -29,18 +29,3 @@ function gamePage() {
         })
         .then(gameLogic()) //starts event listeners and game logic
 }
-
-function gameLogic()    {
-    document.body.onkeyup = (event) => {
-            if (event.target.tagName === 'TEXTAREA') {
-                console.log(snippet.match(new RegExp(`^${event.target.value}`)))
-                let match = snippet.match(new RegExp(`^${event.target.value}`))[0]
-
-                // if (event.code === "Space")  {
-                //     event.target.value = ""
-                // }
-            }
-        }
-}
-
-//getting snippet into letters that will be compared
