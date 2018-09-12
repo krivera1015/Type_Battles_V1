@@ -21,18 +21,20 @@ function gameLogic(snippet) {
     userInput.onkeyup = (event) => {
         if (alphanumericFilter()) {
 
-            console.log(userInput.value.slice(-1), focusedChar)
+            console.log(event.key)
             if (event.code === "Backspace") {
+                while(event.repeat) {
                 backspace()
+                }
             }
             else if (document.querySelector("#temp-red").innerText !== "") {
                 charToTmpRed()
             }
-            else if (userInput.value.slice(-1) === " " && tmpGreen.join("") === focusedWord) {
+            else if (event.code === "Space" && tmpGreen.join("") === focusedWord) {
                 drawGreenWord()
                 drawSnippet()
             }
-            else if (userInput.value.slice(-1) === focusedChar) {
+            else if (event.key === focusedChar) {
                 charToTmpGreen()
             }
             else {
@@ -88,6 +90,9 @@ function gameLogic(snippet) {
 
     function charToTmpRed() {
         //draw each char into <span> with red highlight style
+        if(splitSnippet[0].substring(1) === ""){
+            return
+        }
         const firstChar = focusedChar
         const newWord = splitSnippet[0].substring(1)
         const tempRedNode = document.querySelector("#temp-red")
@@ -100,7 +105,7 @@ function gameLogic(snippet) {
     }
 
     function backspace()    {
-        if (tmpRed.length === 0 && tmpGreen === 0)    {
+        if (tmpRed.length === 0 && tmpGreen.length === 0)    {
             return
         }
         else if (tmpRed.length === 0)   {
