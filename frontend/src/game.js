@@ -2,18 +2,19 @@ const playPage = document.querySelector(".play-page")
 
 
 //get random function
-get_random = function (list) {
-    return list[Math.floor((Math.random() * list.length))];
+function getRandom (bound) {
+    return ~~(Math.random() * bound)
 }
 
 
 
-
+//TODO: Refactor book fetching code
 //getting snippets and appending to gamePage
 function gamePage() {
     GoogleAdapter.getBooks()
     .then(json => {
-        let snippet = get_random(json.items.map(book => (book.searchInfo.textSnippet)))
+        let randomIndex = getRandom(json.items.length)
+        let snippet = json.items[randomIndex].searchInfo.textSnippet
 
         playPage.innerHTML =
             `
