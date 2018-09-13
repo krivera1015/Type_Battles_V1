@@ -4,11 +4,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const loginContainer = document.querySelector(".login-container")
 
     loginContainer.innerHTML = `
-    <form>
-        <input type="text" placeholder="username" name="username"/>
-        <input type="submit" id="lets-type" value="Lets Type!"></input>
+    <form id="field-area">
+        <input class="form-control" type="text" placeholder="username" name="username"  autofocus/>
+        <br>
+        <input class="btn btn-primary btn-lg" type="submit" id="lets-type" value="Lets Type!"></input>
     </form>
     `
+
 
 
     loginContainer.addEventListener('submit', (e) => {
