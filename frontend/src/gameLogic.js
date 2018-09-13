@@ -25,14 +25,22 @@ function gameLogic(snippet) {
 
     //Alphanumeric keys only!
     userInput.addEventListener("keyup", (event) => {
-        
-        //God awful key validation
-        if(!(!!(event.key.match(/^[a-z0-9\!\@\#\$\%\^\&\*\(\)\=\_\+\[\]\{\}\;\'\:\"\,\.\/\<\>\?\`\~\)\\\|\-]$/i))) && event.key !== "Backspace")  {
+        if(userInput.value[0] === " ") {
+            userInput.value = userInput.value.substring(1)
             return
         }
-            
-        if(event.key === " " && inputBuffer.length === 0) {
-            userInput.value = ""
+
+        if(inputBuffer.length + 1 < userInput.value.split("").length) {
+            let difference = inputBuffer.length - userInput.value.split("").length + 1
+
+            inputBuffer = inputBuffer.splice(0, inputBuffer.length - difference)
+        }
+        else    {
+            inputBuffer = userInput.value.split("")
+        }
+
+        //God awful key validation
+        if(!(!!(event.key.match(/^[a-z0-9\!\@\#\$\%\^\&\*\(\)\=\_\+\[\]\{\}\;\'\:\"\,\.\/\<\>\?\`\~\)\\\|\s\-]$/i))) && event.key !== "Backspace")  {
             return
         }
         
@@ -42,9 +50,9 @@ function gameLogic(snippet) {
             return
         }
 
-        if(!(event.key === "Backspace"))    {
-            inputBuffer.push(event.key)
-        }
+        // if(!(event.key === "Backspace"))    {
+        //     inputBuffer.push(event.key)
+        // }
         
         console.log(inputBuffer)
 
@@ -84,14 +92,14 @@ function gameLogic(snippet) {
             renderBoard()
             userInput.value = ""
         } 
-        else if (event.key === focusedChar && redChar.length === 0) { //user types correct letter
+        else if (inputBuffer[inputBuffer.length - 1] === focusedChar && redChar.length === 0) { //user types correct letter
             greenChar.push(focusedChar)
             renderedSnippet[0] = renderedSnippet[0].substring(1)
             focusedChar = focusedWord[++focusedCharIndex]
 
             renderBoard()
         }
-        else if(event.key !== focusedChar || redChar.length !== 0){ //user types wrong letter
+        else if(inputBuffer[inputBuffer.length - 1] !== focusedChar || redChar.length !== 0){ //user types wrong letter
             redChar.push(focusedChar)
             renderedSnippet[0] = renderedSnippet[0].substring(1)
             focusedChar = focusedWord[++focusedCharIndex]
