@@ -1,87 +1,172 @@
-//The state of the board
-let focusedWord = 0
-let focusedChar = 0
 
-let splitSnippet = []
+let focusedWordIndex = 0
+let focusedCharIndex = 0
+let focusedWord = ""
+let focusedChar = ""
 
-let greenWords = []
+let renderedSnippet = []
+let originalSnippet = []
+let inputBuffer = []
+let lastState = []
 
-let tmpGreen = []
-let tmpRed = []
+let correctWords = []
+let greenChar = []
+let redChar = []
 
-function gameLogic (snippet)  {
-  splitSnippet = snippet.split(" ")
-
-  //TODO: refactor this!
-  document.body.onkeyup = (event) => {
-
-      if (event.target.tagName === 'TEXTAREA' && alphanumericFilter()){
-          console.log(event.key)
-          if(document.querySelector("#temp-red").innerText !== ""){
-            charToTmpRed()
-          }
-          else if (event.code === "Space" && tmpGreen.join("") === splitSnippet[focusedWord])  {
-            drawGreenWord()
-            drawSnippet()
-          }
-          else if (event.key === splitSnippet[focusedWord][focusedChar] )   {
-              charToTmpGreen()
-          }
-          else{
-              charToTmpRed()
-          }
-      }
-  }
+function gameLogic(snippet) {
+    const userInput = document.querySelector("#user-input")
+    
+    //Set initial state
+    originalSnippet = snippet.split(" ")
+    renderedSnippet = snippet.split(" ")
 
 
+    //Focus first letter of first word
+    focusedWord = originalSnippet[focusedWordIndex]
+    focusedChar = focusedWord[focusedCharIndex]
 
-  function drawSnippet()  {
-      //Draw each word to the <p>
-      const completedSnippet = splitSnippet.join(" ")
-      const snippetContainer = document.querySelector("#current-snippet")
-      snippetContainer.innerText = completedSnippet
-  }
+    userInput.addEventListener("keydown", (event) => {
+        if (event.code === "Backspace") { //Backspace
+            if(redChar.length === 0 && greenChar.length === 0) {
+                return
+            }
+            else if (redChar.length === 0)  {
+                let deletedChar = greenChar.pop()
+                renderedSnippet[0] = deletedChar + renderedSnippet[0]
+                focusedCharIndex--
+                if(focusedCharIndex < 0)    {
+                    focusedCharIndex = 0
+                }
+                focusedChar = focusedWord[focusedCharIndex]
+                renderBoard()
+            }
+            else    {
+                let deletedChar = redChar.pop()
+                renderedSnippet[0] = deletedChar + renderedSnippet[0]
+                focusedCharIndex--
+                if(focusedCharIndex < 0)    {
+                    focusedCharIndex = 0
+                }
+                focusedChar = focusedWord[focusedCharIndex]
+                renderBoard()
+            }
+        }
+    })
+    
+    function gameLoop() {
+        if(userInput.value[0] === " ") {
+            userInput.value = userInput.value.substring(1)
+            return
+        }
 
-  function drawGreenWord()  {
-      //draw each word into <span> with green highlight style
-      let completedWord = splitSnippet.shift()
-      const greenNode = document.querySelector("#green")
-      const tmpGreenNode = document.querySelector("#temp-green")
+        lastState = inputBuffer
+        inputBuffer = userInput.value.split("")
 
-      greenWords.push(" " + completedWord)
-      tmpGreenNode.innerText = ""
-      greenNode.innerText = " " + tmpGreen.join()
-      event.target.value = ""
-  }
+        if(lastState.length > inputBuffer.length)    {
+            console.log(true)
+        }
+        else    {
+            console.log(false)
+        }
 
-  function charToTmpGreen()   {
-    //takes letter out of splitWord and puts it in <span> with green highlight style
-    const firstChar = splitSnippet[focusedWord][focusedChar]
-    const newWord = splitSnippet[focusedWord].substring(1)
-    const tempGreen = document.querySelector("#temp-green")
-    tmpGreen.push(firstChar)
-    tempGreen.innerText = tempGreen.innerText + firstChar
-    if (newWord === ""){
-      splitSnippet.shift()
+        if(lastState.equals(inputBuffer) || userInput.value === "" || lastState.length > inputBuffer.length)   {
+            return
+        }
+
+        
+        //Limit the number of wrong characters someone can type
+        if(userInput.value.length > focusedWord.length + 3)   {
+            limitInputSize(userInput, focusedWord.length + 3)
+            return
+        }
+        
+        console.log(inputBuffer)
+
+        if ((inputBuffer.join("")) === focusedWord){
+            //Update visual state
+            correctWords.push(focusedWord)
+            renderedSnippet.shift()
+            
+            //Reset state
+            inputBuffer = []
+            greenChar = []
+            
+            //Focus first letter of next word
+            focusedWord = originalSnippet[++focusedWordIndex]
+            focusedCharIndex = 0
+            focusedChar = focusedWord[focusedCharIndex]
+            
+            renderBoard()
+            userInput.value = ""
+        } 
+        else if (inputBuffer[inputBuffer.length - 1] === focusedChar && redChar.length === 0) { //user types correct letter
+            greenChar.push(focusedChar)
+            renderedSnippet[0] = renderedSnippet[0].substring(1)
+            focusedChar = focusedWord[++focusedCharIndex]
+
+            renderBoard()
+        }
+        else if(inputBuffer[inputBuffer.length - 1] !== focusedChar || redChar.length !== 0){ //user types wrong letter
+            redChar.push(focusedChar)
+            if(renderedSnippet[0] !== ""){
+                renderedSnippet[0] = renderedSnippet[0].substring(1)
+            }
+            focusedCharIndex++
+            if(focusedCharIndex > focusedWord.length){
+                focusCharIndex = focusedWord.length - 1
+            }
+            focusedChar = focusedWord[focusedCharIndex]
+
+            renderBoard()
+        }
     }
-    else {
-      splitSnippet[0] = newWord
-    }
-    drawSnippet()
-  }
 
-  function charToTmpRed()  {
-      //draw each char into <span> with red highlight style
-      const firstChar = splitSnippet[focusedWord][focusedChar]
-      const newWord = splitSnippet[focusedWord].substring(1)
-      const tempRed = document.querySelector("#temp-red")
-      tempRed.innerText = tempRed.innerText + firstChar
-      splitSnippet[0] = newWord
-      drawSnippet()
-  }
-
-  function alphanumericFilter() {
-    return (event.keyCode !== 20 && event.keyCode !== 16 && event.keyCode !== 17 && event.keyCode !== 18)
-
-  }
+    window.setInterval(gameLoop, 1)
 }
+
+function renderBoard()  {
+    // let snippetNode = document.querySelector("#snippet-box")
+    let correctWordsNode = document.querySelector("#green")
+    let greenCharNode = document.querySelector("#temp-green")
+    let redCharNode = document.querySelector("#temp-red")
+    let renderedSnippetNode = document.querySelector("#current-snippet")
+
+    correctWordsNode.innerText = correctWords.join(" ") + " "
+    greenCharNode.innerText = greenChar.join("")
+    redCharNode.innerText = redChar.join("")
+    renderedSnippetNode.innerText = renderedSnippet.join(" ")
+}
+
+function limitInputSize(userInput, maxLength)   {
+    userInput.value = userInput.value.substring(0, maxLength);
+}
+
+// Warn if overriding existing method
+if(Array.prototype.equals)
+    console.warn("Overriding existing Array.prototype.equals. Possible causes: New API defines the method, there's a framework conflict or you've got double inclusions in your code.");
+// attach the .equals method to Array's prototype to call it on any array
+Array.prototype.equals = function (array) {
+    // if the other array is a falsy value, return
+    if (!array)
+        return false;
+
+    // compare lengths - can save a lot of time 
+    if (this.length != array.length)
+        return false;
+
+    for (var i = 0, l=this.length; i < l; i++) {
+        // Check if we have nested arrays
+        if (this[i] instanceof Array && array[i] instanceof Array) {
+            // recurse into the nested arrays
+            if (!this[i].equals(array[i]))
+                return false;       
+        }           
+        else if (this[i] != array[i]) { 
+            // Warning - two different object instances will never be equal: {x:20} != {x:20}
+            return false;   
+        }           
+    }       
+    return true;
+}
+// Hide method from for-in loops
+Object.defineProperty(Array.prototype, "equals", {enumerable: false});

@@ -14,8 +14,6 @@ function getRandom (bound) {
     clearInterval(downloadTimer);
   },1000);
 
-
-
 //TODO: Refactor book fetching code
 //getting snippets and appending to gamePage
 function gamePage() {
