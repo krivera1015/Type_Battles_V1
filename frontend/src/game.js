@@ -38,6 +38,7 @@ function gamePage() {
             <br>
             <br>
             <input type="textfield" id="user-input" placeholder="Get ready, set ... TYPE"rows="1" cols="40" autofocus/>
+            <div id="results"></div>
             `
             return snippet
         })

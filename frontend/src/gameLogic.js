@@ -1,3 +1,4 @@
+let play = true
 
 let focusedWordIndex = 0
 let focusedCharIndex = 0
@@ -16,6 +17,22 @@ let redChar = []
 let timer = 0
 
 function gameLogic(snippet) {
+    play = true
+    focusedWordIndex = 0
+    focusedCharIndex = 0
+    focusedWord = ""
+    focusedChar = ""
+    renderedSnippet = []
+    originalSnippet = []
+    inputBuffer = []
+    lastState = []
+    correctWords = []
+    greenChar = []
+    redChar = []
+
+
+
+
     const userInput = document.querySelector("#user-input")
 
 
@@ -28,40 +45,12 @@ function gameLogic(snippet) {
     focusedWord = originalSnippet[focusedWordIndex]
     focusedChar = focusedWord[focusedCharIndex]
 
-    userInput.addEventListener("keydown", (event) => {
-        // e.repeat
-        if (event.code === "Backspace") { //Backspace
-            if (redChar.length === 0 && greenChar.length === 0) {
-                return
-            }
-            else if (redChar.length === 0) {
-                let deletedChar = greenChar.pop()
-                renderedSnippet[0] = deletedChar + renderedSnippet[0]
-                focusedCharIndex--
-                if (focusedCharIndex < 0) {
-                    focusedCharIndex = 0
-                }
-                focusedChar = focusedWord[focusedCharIndex]
-                renderBoard()
-            }
-            else {
-
-                let deletedChar = redChar.pop()
-                renderedSnippet[0] = deletedChar + renderedSnippet[0]
-                focusedCharIndex--
-                if (focusedCharIndex < 0) {
-                    focusedCharIndex = 0
-                }
-                focusedChar = focusedWord[focusedCharIndex]
-                renderBoard()
-            }
-        }
-    })
+    userInput.addEventListener("keydown", backspaceEvent)
 
     function gameLoop() {
-        if (!gameOver()) {
+        if (play) {
             wordsPerMinute()
-
+            play = gameOver()
             if (userInput.value[0] === " ") {
                 userInput.value = userInput.value.substring(1)
                 return
@@ -126,7 +115,8 @@ function gameLogic(snippet) {
         }
     }
 
-    window.setInterval(gameLoop, 1)
+    loop = window.setInterval(gameLoop, 1)
+
 }
 
 function renderBoard() {
@@ -156,42 +146,70 @@ function wordsPerMinute() {
 }
 
 function gameOver() {
+    let result = true
+    let userInput = document.querySelector("#user-input")
     if (correctWords.length === originalSnippet.length) {
         playAgainDiv()
-        return true
+        userInput.removeEventListener("keydown", backspaceEvent)
+        clearInterval(loop)
+        result = false
     }
-    return false
+    return result
 }
 
 //words per minutes modal
 
 function playAgainDiv() {
-  const playAgainDiv = document.querySelector(".play-again")
+    let results = document.querySelector("#results")
+    let wpm = document.createElement("p")
+    let playAgain = document.createElement("button")
 
-  playAgainDiv.innerHTML = `
-    <div class="modal fade" id="endModal" role="dialog">
-       <div class="modal-dialog modal-sm">
-         <div class="modal-content">
-           <div class="modal-header">
-             <button type="button" class="close" data-dismiss="modal">&times;</button>
-           </div>
-           <h4 class="modal-title">Great job beast!</h4>
-           <div class="modal-body">
-             <p>Your WPM is</p>
-           </div>
-           <div class="modal-footer">
-             <button type="button" class="btn btn-default" data-again="modal">Play Again?</button>
-             <button type="button" class="btn btn-default" data-dismiss="modal">Leave</button>
-           </div>
-         </div>
-       </div>
-     </div>`
-     setTimeout(() => {$('#endModal').modal('show')}, 2000);
+    wpm.id = "wpm"
+    wpm.innerText = `You type at ${wordsPerMinute()} words per minute!`
+    wpm.marginBottom = "75px"
 
+    playAgain.id = "play-again"
+    playAgain.className = "btn btn-primary btn-lg"
+    playAgain.innerText = "Play Again?"
+    playAgain.addEventListener("click", () => {
+        gamePage()
+    })
+
+    results.append(wpm, playAgain)
+
+    document.querySelector('#user-input').remove()
 }
 
 
+let backspaceEvent = (event) => {
+    // e.repeat
+    if (event.code === "Backspace") { //Backspace
+        if (redChar.length === 0 && greenChar.length === 0) {
+            return
+        }
+        else if (redChar.length === 0) {
+            let deletedChar = greenChar.pop()
+            renderedSnippet[0] = deletedChar + renderedSnippet[0]
+            focusedCharIndex--
+            if (focusedCharIndex < 0) {
+                focusedCharIndex = 0
+            }
+            focusedChar = focusedWord[focusedCharIndex]
+            renderBoard()
+        }
+        else {
 
+            let deletedChar = redChar.pop()
+            renderedSnippet[0] = deletedChar + renderedSnippet[0]
+            focusedCharIndex--
+            if (focusedCharIndex < 0) {
+                focusedCharIndex = 0
+            }
+            focusedChar = focusedWord[focusedCharIndex]
+            renderBoard()
+        }
+    }
+}
 
 
 //HELPER FUNCTIONS//
