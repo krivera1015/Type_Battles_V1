@@ -13,6 +13,8 @@ let correctWords = []
 let greenChar = []
 let redChar = []
 
+let timer = 0
+
 function gameLogic(snippet) {
     const userInput = document.querySelector("#user-input")
 
@@ -26,27 +28,27 @@ function gameLogic(snippet) {
     focusedChar = focusedWord[focusedCharIndex]
 
     userInput.addEventListener("keydown", (event) => {
-      // e.repeat
+        // e.repeat
         if (event.code === "Backspace") { //Backspace
-            if(redChar.length === 0 && greenChar.length === 0) {
+            if (redChar.length === 0 && greenChar.length === 0) {
                 return
             }
-            else if (redChar.length === 0)  {
+            else if (redChar.length === 0) {
                 let deletedChar = greenChar.pop()
                 renderedSnippet[0] = deletedChar + renderedSnippet[0]
                 focusedCharIndex--
-                if(focusedCharIndex < 0)    {
+                if (focusedCharIndex < 0) {
                     focusedCharIndex = 0
                 }
                 focusedChar = focusedWord[focusedCharIndex]
                 renderBoard()
             }
-            else    {
-                
+            else {
+
                 let deletedChar = redChar.pop()
                 renderedSnippet[0] = deletedChar + renderedSnippet[0]
                 focusedCharIndex--
-                if(focusedCharIndex < 0)    {
+                if (focusedCharIndex < 0) {
                     focusedCharIndex = 0
                 }
                 focusedChar = focusedWord[focusedCharIndex]
@@ -56,30 +58,30 @@ function gameLogic(snippet) {
     })
 
     function gameLoop() {
-        if(userInput.value[0] === " ") {
+        gameOver()
+        wordsPerMinute()
+
+        if (userInput.value[0] === " ") {
             userInput.value = userInput.value.substring(1)
             return
         }
 
         lastState = inputBuffer
         inputBuffer = userInput.value.split("")
-        console.log(inputBuffer)
 
         //Keeps logic from running when no change occured
-        if(lastState.equals(inputBuffer) || userInput.value === "" || lastState.length > inputBuffer.length)   {
+        if (lastState.equals(inputBuffer) || userInput.value === "" || lastState.length > inputBuffer.length) {
             return
         }
 
         //Limit the number of wrong characters someone can type
-        if(userInput.value.length > focusedWord.length)   {
+        if (userInput.value.length > focusedWord.length) {
             inputBuffer = inputBuffer.slice(0, focusedWord.length)
             limitInputSize(userInput, focusedWord.length)
             return
         }
 
-        console.log(inputBuffer)
-
-        if ((inputBuffer.join("")) === focusedWord){
+        if ((inputBuffer.join("")) === focusedWord) {
             //Update visual state
             correctWords.push(focusedWord)
             renderedSnippet.shift()
@@ -103,13 +105,13 @@ function gameLogic(snippet) {
 
             renderBoard()
         }
-        else if((inputBuffer[inputBuffer.length - 1] !== focusedChar  || redChar.length !== 0) && inputBuffer.length <= focusedWord.length){ //user types wrong letter
+        else if ((inputBuffer[inputBuffer.length - 1] !== focusedChar || redChar.length !== 0) && inputBuffer.length <= focusedWord.length) { //user types wrong letter
             redChar.push(focusedChar)
-            if(renderedSnippet[0] !== ""){
+            if (renderedSnippet[0] !== "") {
                 renderedSnippet[0] = renderedSnippet[0].substring(1)
             }
             focusedCharIndex++
-            if(focusedCharIndex > focusedWord.length){
+            if (focusedCharIndex > focusedWord.length) {
                 focusCharIndex = focusedWord.length - 1
             }
             focusedChar = focusedWord[focusedCharIndex]
@@ -121,7 +123,7 @@ function gameLogic(snippet) {
     window.setInterval(gameLoop, 1)
 }
 
-function renderBoard()  {
+function renderBoard() {
     // let snippetNode = document.querySelector("#snippet-box")
     let correctWordsNode = document.querySelector("#green")
     let greenCharNode = document.querySelector("#temp-green")
@@ -134,12 +136,34 @@ function renderBoard()  {
     renderedSnippetNode.innerText = renderedSnippet.join(" ")
 }
 
-function limitInputSize(userInput, maxLength)   {
+function limitInputSize(userInput, maxLength) {
     userInput.value = userInput.value.substring(0, maxLength);
 }
 
+function startTimer() {
+    window.setInterval(() => { timer++ }, 1000)
+}
+
+function wordsPerMinute() {
+    let wpm = Math.floor(correctWords.length / timer * 60)
+    console.log(wpm)
+}
+
+function gameOver() {
+    if (correctWords.length === originalSnippet.length) {
+        console.log("you win")
+        return true
+    }
+    return false
+}
+
+
+
+
+//HELPER FUNCTIONS//
+
 // Warn if overriding existing method
-if(Array.prototype.equals)
+if (Array.prototype.equals)
     console.warn("Overriding existing Array.prototype.equals. Possible causes: New API defines the method, there's a framework conflict or you've got double inclusions in your code.");
 // attach the .equals method to Array's prototype to call it on any array
 Array.prototype.equals = function (array) {
@@ -151,7 +175,7 @@ Array.prototype.equals = function (array) {
     if (this.length != array.length)
         return false;
 
-    for (var i = 0, l=this.length; i < l; i++) {
+    for (var i = 0, l = this.length; i < l; i++) {
         // Check if we have nested arrays
         if (this[i] instanceof Array && array[i] instanceof Array) {
             // recurse into the nested arrays
@@ -165,5 +189,6 @@ Array.prototype.equals = function (array) {
     }
     return true;
 }
+
 // Hide method from for-in loops
-Object.defineProperty(Array.prototype, "equals", {enumerable: false});
+Object.defineProperty(Array.prototype, "equals", { enumerable: false });
