@@ -2,9 +2,9 @@ const playPage = document.querySelector(".play-page")
 
 
 //get random function
-function getRandom(bound) {
-    return ~~(Math.random() * bound)
-}
+// function getRandom(bound) {
+//     return ~~(Math.random() * bound)
+// }
 
 
   var timeleft = 10;
@@ -22,23 +22,21 @@ function gamePage() {
     GoogleAdapter.getBooks()
         .then(json => {
             console.log(json)
-            let randomIndex = getRandom(json.items.length)
-            let book = json.items[randomIndex]
-            let snippet = book.searchInfo.textSnippet
+            // let randomIndex = getRandom(json.items.length)
+            let book = json[0]
+            // let snippet = book.searchInfo.textSnippet
+            const snippet = json[0].quote
 
             playPage.innerHTML =
                 `
-            <div class="image"
-                <img src=${book.volumeInfo.imageLinks.smallThumbnail}>
-            </div>
             <div class="card">
                 <div class="card-header">
-                ${book.volumeInfo.title}
+                ${book.author}
                 </div>
                 <div class="card-body">
                 <blockquote class="blockquote mb-0">
                     <p id="snippet-box"><span id="green"></span><span id="temp-green"></span><span id="temp-red"></span><span id="current-snippet">${snippet}</span></p>
-                <footer class="blockquote-footer">${book.volumeInfo.authors[0]}</cite></footer>
+                <footer class="blockquote-footer">${book.category}</cite></footer>
                 </blockquote>
                 </div>
             </div>

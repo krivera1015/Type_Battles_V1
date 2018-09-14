@@ -38,11 +38,11 @@ document.addEventListener("DOMContentLoaded", () => {
                    </div>
                  </div>
                </div>`
-               setTimeout($('#myModal').modal('show'), 5000);
-               setTimeout(function() {$('#myModal').modal('hide')}, 5000);
+               setTimeout($('#myModal').modal('show'), 2000);
+               setTimeout(function() {$('#myModal').modal('hide')}, 2000);
                // $('#myModal').modal('close')
                playPage.innerHTML = ""
-               // startTimer()
+               setTimeout(startTimer, 2000);
             gamePage()
         }
     })
