@@ -52,6 +52,12 @@
 }
 
 /*game page*/
+
+#progressBar {
+  text-align: center;
+  margin-left: 15%;
+}
+
 .play-page {
   text-align: center;
   padding-top: 10%
