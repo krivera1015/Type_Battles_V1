@@ -1,0 +1,109 @@
+/*every page*/
+.container{
+  background-color: #58DDD0;
+  min-height: 100vh;
+  min-width: 100vw;
+  font-family: 'Raleway', sans-serif;
+}
+
+@font-face {
+  font-family: "Ostrich Sans Bold";
+  src: url("OstrichSans-Bold.otf")
+}
+
+
+#logo{
+  display:block;
+  padding: 130px;
+  font-size: 70px;
+  color: #EDFFEC;
+  font-family: "Ostrich Sans Bold"
+}
+
+#field-area{
+  display: block;
+  padding-top: 50px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/*login page*/
+.login-container {
+  height: 75vh;
+  text-align: center;
+  height: 200px;
+  width: 400px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-top: -100px;
+  margin-left: -200px;
+}
+
+#type-racer-bar {
+  height: 15vh;
+  justify-content: space-around;
+  align-items: center;
+  text-align: center;
+}
+
+/*game page*/
+.play-page {
+  text-align: center;
+  padding-top: 10%
+}
+
+.img {
+  text-align: top;
+}
+
+.card {
+  box-shadow: 5px 10px #888888;
+  background-color: #EDFFEC;
+  border-radius: 25px;
+  margin-left: 20%;
+  margin-right: 20%
+}
+
+.card-header {
+  border-radius: 25px;
+}
+
+.card-body {
+  background-color: #EDFFEC;
+  border-radius: 25px
+}
+
+
+#green {
+  background-color: #71E893
+}
+
+#temp-green {
+  background-color: #71E893
+}
+
+#temp-red {
+  background-color: #CE4444
+}
+
+*:focus {
+  outline: none;
+}
+
+#user-input {
+  background-color: #58DDD0;
+  border-width: thick;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  font-size: 18pt;
+  border-color: #396387;
+  text-align: center;
+  color: #EDFFEC
+}
+
+#user-input::placeholder {
+  color: #EDFFEC;
+  text-align: center;
+}
