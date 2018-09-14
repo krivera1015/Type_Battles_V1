@@ -9,10 +9,10 @@ function getRandom (bound) {
 
   var timeleft = 10;
   var downloadTimer = setInterval(function(){
-    document.getElementById("progressBar").value = 10 - --timeleft;
+    document.getElementById("progressBar").value = 10- --timeleft;
     if(timeleft <= 0)
     clearInterval(downloadTimer);
-  },1000);
+  },500);
 
 
 
@@ -44,7 +44,7 @@ function gamePage() {
             </div>
             <br>
             <br>
-            <textArea id="user-input" placeholder="Get ready, set ... TYPE"rows="1" cols="40"></textArea>
+            <input type="textfield" id="user-input" placeholder="Get ready, set ... TYPE"rows="1" cols="40" autofocus/>
             `
             return snippet
     })

@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
                      <!-- <div class="modal-header">
                        <button type="button" class="close" data-dismiss="modal">&times;</button>
                      </div> -->
-                     <h4 class="modal-title">Countdown Till Race</h4>
+                     <h4 class="modal-title">Loading</h4>
                      <div class="modal-body">
                        <progress value="0" max="10" id="progressBar"></progress>
                      </div>
@@ -38,10 +38,11 @@ document.addEventListener("DOMContentLoaded", () => {
                    </div>
                  </div>
                </div>`
+               setTimeout($('#myModal').modal('show'), 5000);
                setTimeout(function() {$('#myModal').modal('hide')}, 5000);
-               // setTimeout($('#myModal').modal('show'), 5000);
                // $('#myModal').modal('close')
-               //playPage.innerHTML = ""
+               playPage.innerHTML = ""
+               // startTimer()
             gamePage()
         }
     })
