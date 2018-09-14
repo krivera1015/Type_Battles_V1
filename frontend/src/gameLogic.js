@@ -18,6 +18,7 @@ let timer = 0
 function gameLogic(snippet) {
     const userInput = document.querySelector("#user-input")
 
+
     //Set initial state
     originalSnippet = snippet.split(" ")
     renderedSnippet = snippet.split(" ")
@@ -58,65 +59,70 @@ function gameLogic(snippet) {
     })
 
     function gameLoop() {
-        gameOver()
-        wordsPerMinute()
+        if (!gameOver()) {
+            wordsPerMinute()
 
-        if (userInput.value[0] === " ") {
-            userInput.value = userInput.value.substring(1)
-            return
-        }
+            if (userInput.value[0] === " ") {
+                userInput.value = userInput.value.substring(1)
+                return
+            }
 
-        lastState = inputBuffer
-        inputBuffer = userInput.value.split("")
+            lastState = inputBuffer
+            inputBuffer = userInput.value.split("")
 
-        //Keeps logic from running when no change occured
-        if (lastState.equals(inputBuffer) || userInput.value === "" || lastState.length > inputBuffer.length) {
-            return
-        }
+            //Keeps logic from running when no change occured
+            if (lastState.equals(inputBuffer) || userInput.value === "" || lastState.length > inputBuffer.length) {
+                return
+            }
 
-        //Limit the number of wrong characters someone can type
-        if (userInput.value.length > focusedWord.length) {
-            inputBuffer = inputBuffer.slice(0, focusedWord.length)
-            limitInputSize(userInput, focusedWord.length)
-            return
-        }
+            //Limit the number of wrong characters someone can type
+            if (userInput.value.length > focusedWord.length) {
+                inputBuffer = inputBuffer.slice(0, focusedWord.length)
+                limitInputSize(userInput, focusedWord.length)
+                return
+            }
 
-        if ((inputBuffer.join("")) === focusedWord) {
-            //Update visual state
-            correctWords.push(focusedWord)
-            renderedSnippet.shift()
+            if ((inputBuffer.join("")) === focusedWord) {
+                //Update visual state
+                correctWords.push(focusedWord)
+                renderedSnippet.shift()
 
-            //Reset state
-            inputBuffer = []
-            greenChar = []
+                //Reset state
+                inputBuffer = []
+                greenChar = []
 
-            //Focus first letter of next word
-            focusedWord = originalSnippet[++focusedWordIndex]
-            focusedCharIndex = 0
-            focusedChar = focusedWord[focusedCharIndex]
+                //Focus first letter of next word
+                ++focusedWordIndex
+                if (focusedWordIndex > originalSnippet.length - 1) {
+                    focusedWordIndex = originalSnippet.length - 1
+                }
+                focusedWord = originalSnippet[focusedWordIndex]
+                focusedCharIndex = 0
+                focusedChar = focusedWord[focusedCharIndex]
 
-            renderBoard()
-            userInput.value = ""
-        }
-        else if (inputBuffer[inputBuffer.length - 1] === focusedChar && redChar.length === 0) { //user types correct letter
-            greenChar.push(focusedChar)
-            renderedSnippet[0] = renderedSnippet[0].substring(1)
-            focusedChar = focusedWord[++focusedCharIndex]
-
-            renderBoard()
-        }
-        else if ((inputBuffer[inputBuffer.length - 1] !== focusedChar || redChar.length !== 0) && inputBuffer.length <= focusedWord.length) { //user types wrong letter
-            redChar.push(focusedChar)
-            if (renderedSnippet[0] !== "") {
+                renderBoard()
+                userInput.value = ""
+            }
+            else if (inputBuffer[inputBuffer.length - 1] === focusedChar && redChar.length === 0) { //user types correct letter
+                greenChar.push(focusedChar)
                 renderedSnippet[0] = renderedSnippet[0].substring(1)
-            }
-            focusedCharIndex++
-            if (focusedCharIndex > focusedWord.length) {
-                focusCharIndex = focusedWord.length - 1
-            }
-            focusedChar = focusedWord[focusedCharIndex]
+                focusedChar = focusedWord[++focusedCharIndex]
 
-            renderBoard()
+                renderBoard()
+            }
+            else if ((inputBuffer[inputBuffer.length - 1] !== focusedChar || redChar.length !== 0) && inputBuffer.length <= focusedWord.length) { //user types wrong letter
+                redChar.push(focusedChar)
+                if (renderedSnippet[0] !== "") {
+                    renderedSnippet[0] = renderedSnippet[0].substring(1)
+                }
+                focusedCharIndex++
+                if (focusedCharIndex > focusedWord.length) {
+                    focusCharIndex = focusedWord.length - 1
+                }
+                focusedChar = focusedWord[focusedCharIndex]
+
+                renderBoard()
+            }
         }
     }
 
@@ -146,16 +152,17 @@ function startTimer() {
 
 function wordsPerMinute() {
     let wpm = Math.floor(correctWords.length / timer * 60)
-    console.log(wpm)
+    return wpm
 }
 
 function gameOver() {
     if (correctWords.length === originalSnippet.length) {
-        console.log("you win")
         return true
     }
     return false
 }
+
+
 
 
 
