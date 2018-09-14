@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
     //login fields created
     const loginContainer = document.querySelector(".login-container")
     const playPage = document.querySelector(".play-page")
+    const playAgainDiv = document.querySelector(".play-again")
 
     loginContainer.innerHTML = `
     <form id="field-area">
@@ -25,16 +26,10 @@ document.addEventListener("DOMContentLoaded", () => {
             playPage.innerHTML = `<div class="modal fade" id="myModal" role="dialog">
                  <div class="modal-dialog modal-sm">
                    <div class="modal-content">
-                     <!-- <div class="modal-header">
-                       <button type="button" class="close" data-dismiss="modal">&times;</button>
-                     </div> -->
                      <h4 class="modal-title">Loading</h4>
                      <div class="modal-body">
                        <progress value="0" max="10" id="progressBar"></progress>
                      </div>
-                     <!-- <div class="modal-footer">
-                       <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                     </div> -->
                    </div>
                  </div>
                </div>`
@@ -44,6 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
                playPage.innerHTML = ""
                setTimeout(startTimer, 2000);
             gamePage()
+
         }
     })
 })
