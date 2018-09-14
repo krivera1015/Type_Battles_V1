@@ -41,6 +41,7 @@ function gameLogic(snippet) {
                 renderBoard()
             }
             else    {
+                
                 let deletedChar = redChar.pop()
                 renderedSnippet[0] = deletedChar + renderedSnippet[0]
                 focusedCharIndex--
@@ -61,26 +62,19 @@ function gameLogic(snippet) {
 
         lastState = inputBuffer
         inputBuffer = userInput.value.split("")
+        console.log(inputBuffer)
 
-        if(lastState.length > inputBuffer.length)    {
-            console.log(true)
-        }
-        else    {
-            console.log(false)
-        }
-
+        //Keeps logic from running when no change occured
         if(lastState.equals(inputBuffer) || userInput.value === "" || lastState.length > inputBuffer.length)   {
             return
         }
 
-        
         //Limit the number of wrong characters someone can type
-        if(userInput.value.length > focusedWord.length + 3)   {
-            limitInputSize(userInput, focusedWord.length + 3)
+        if(userInput.value.length > focusedWord.length)   {
+            inputBuffer = inputBuffer.slice(0, focusedWord.length)
+            limitInputSize(userInput, focusedWord.length)
             return
         }
-        
-        console.log(inputBuffer)
 
         if ((inputBuffer.join("")) === focusedWord){
             //Update visual state
@@ -106,7 +100,7 @@ function gameLogic(snippet) {
 
             renderBoard()
         }
-        else if(inputBuffer[inputBuffer.length - 1] !== focusedChar || redChar.length !== 0){ //user types wrong letter
+        else if((inputBuffer[inputBuffer.length - 1] !== focusedChar  || redChar.length !== 0) && inputBuffer.length <= focusedWord.length){ //user types wrong letter
             redChar.push(focusedChar)
             if(renderedSnippet[0] !== ""){
                 renderedSnippet[0] = renderedSnippet[0].substring(1)
