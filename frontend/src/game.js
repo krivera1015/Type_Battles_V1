@@ -20,7 +20,8 @@ function gamePage() {
             // let randomIndex = getRandom(json.items.length)
             let book = json[0]
             // let snippet = book.searchInfo.textSnippet
-            const snippet = json[0].quote
+            // const snippet = json[0].quote
+            const snippet = "The quick brown fox jumps over the lazy dog"
 
             playPage.innerHTML =
                 `

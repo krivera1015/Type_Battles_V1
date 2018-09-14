@@ -23,23 +23,8 @@ document.addEventListener("DOMContentLoaded", () => {
             return false;
         } else {
             loginContainer.remove()
-            playPage.innerHTML = `<div class="modal fade" id="myModal" role="dialog">
-                 <div class="modal-dialog modal-sm">
-                   <div class="modal-content">
-                     <h4 class="modal-title">Loading</h4>
-                     <div class="modal-body">
-                       <progress value="0" max="10" id="progressBar"></progress>
-                     </div>
-                   </div>
-                 </div>
-               </div>`
-               setTimeout($('#myModal').modal('show'), 2000);
-               setTimeout(function() {$('#myModal').modal('hide')}, 2000);
-               // $('#myModal').modal('close')
-               playPage.innerHTML = ""
-               setTimeout(startTimer, 2000);
+            startTimer()
             gamePage()
-
         }
     })
 })

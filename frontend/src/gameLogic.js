@@ -16,7 +16,8 @@ let redChar = []
 
 let timer = 0
 
-function gameLogic(snippet) {
+function gameLogic(snippet) { 
+    //Reset state everytime page is loaded
     play = true
     focusedWordIndex = 0
     focusedCharIndex = 0
@@ -29,6 +30,7 @@ function gameLogic(snippet) {
     correctWords = []
     greenChar = []
     redChar = []
+
 
 
 
@@ -48,6 +50,7 @@ function gameLogic(snippet) {
     userInput.addEventListener("keydown", backspaceEvent)
 
     function gameLoop() {
+        document.getElementById("user-input").focus()
         if (play) {
             wordsPerMinute()
             play = gameOver()
@@ -137,7 +140,7 @@ function limitInputSize(userInput, maxLength) {
 }
 
 function startTimer() {
-    window.setInterval(() => { timer++ }, 1000)
+    timer = window.setInterval(() => { timer++ }, 1000)
 }
 
 function wordsPerMinute() {
@@ -152,6 +155,7 @@ function gameOver() {
         playAgainDiv()
         userInput.removeEventListener("keydown", backspaceEvent)
         clearInterval(loop)
+        clearInterval(timer)
         result = false
     }
     return result
@@ -171,9 +175,8 @@ function playAgainDiv() {
     playAgain.id = "play-again"
     playAgain.className = "btn btn-primary btn-lg"
     playAgain.innerText = "Play Again?"
-    playAgain.addEventListener("click", () => {
-        gamePage()
-    })
+    playAgain.addEventListener("click", gamePage)
+    playAgain.focus()
 
     results.append(wpm, playAgain)
 
