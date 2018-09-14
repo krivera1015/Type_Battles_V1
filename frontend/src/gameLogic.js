@@ -15,7 +15,7 @@ let redChar = []
 
 function gameLogic(snippet) {
     const userInput = document.querySelector("#user-input")
-    
+
     //Set initial state
     originalSnippet = snippet.split(" ")
     renderedSnippet = snippet.split(" ")
@@ -26,6 +26,7 @@ function gameLogic(snippet) {
     focusedChar = focusedWord[focusedCharIndex]
 
     userInput.addEventListener("keydown", (event) => {
+      // e.repeat
         if (event.code === "Backspace") { //Backspace
             if(redChar.length === 0 && greenChar.length === 0) {
                 return
@@ -53,7 +54,7 @@ function gameLogic(snippet) {
             }
         }
     })
-    
+
     function gameLoop() {
         if(userInput.value[0] === " ") {
             userInput.value = userInput.value.substring(1)
@@ -76,23 +77,25 @@ function gameLogic(snippet) {
             return
         }
 
+        console.log(inputBuffer)
+
         if ((inputBuffer.join("")) === focusedWord){
             //Update visual state
             correctWords.push(focusedWord)
             renderedSnippet.shift()
-            
+
             //Reset state
             inputBuffer = []
             greenChar = []
-            
+
             //Focus first letter of next word
             focusedWord = originalSnippet[++focusedWordIndex]
             focusedCharIndex = 0
             focusedChar = focusedWord[focusedCharIndex]
-            
+
             renderBoard()
             userInput.value = ""
-        } 
+        }
         else if (inputBuffer[inputBuffer.length - 1] === focusedChar && redChar.length === 0) { //user types correct letter
             greenChar.push(focusedChar)
             renderedSnippet[0] = renderedSnippet[0].substring(1)
@@ -144,7 +147,7 @@ Array.prototype.equals = function (array) {
     if (!array)
         return false;
 
-    // compare lengths - can save a lot of time 
+    // compare lengths - can save a lot of time
     if (this.length != array.length)
         return false;
 
@@ -153,13 +156,13 @@ Array.prototype.equals = function (array) {
         if (this[i] instanceof Array && array[i] instanceof Array) {
             // recurse into the nested arrays
             if (!this[i].equals(array[i]))
-                return false;       
-        }           
-        else if (this[i] != array[i]) { 
+                return false;
+        }
+        else if (this[i] != array[i]) {
             // Warning - two different object instances will never be equal: {x:20} != {x:20}
-            return false;   
-        }           
-    }       
+            return false;
+        }
+    }
     return true;
 }
 // Hide method from for-in loops
