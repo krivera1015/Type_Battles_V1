@@ -14,7 +14,6 @@ document.addEventListener("DOMContentLoaded", () => {
     `
 
 
-
     loginContainer.addEventListener('submit', (e) => {
         e.preventDefault()
         const empt = e.target["username"].value;
