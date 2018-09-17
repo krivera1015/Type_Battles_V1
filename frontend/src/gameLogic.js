@@ -16,27 +16,12 @@ let redChar = []
 
 let timer = 0
 
+
+
 function gameLogic(snippet) { 
     //Reset state everytime page is loaded
-    play = true
-    focusedWordIndex = 0
-    focusedCharIndex = 0
-    focusedWord = ""
-    focusedChar = ""
-    renderedSnippet = []
-    originalSnippet = []
-    inputBuffer = []
-    lastState = []
-    correctWords = []
-    greenChar = []
-    redChar = []
-
-
-
-
-
+    resetState(snippet)
     const userInput = document.querySelector("#user-input")
-
 
     //Set initial state
     originalSnippet = snippet.split(" ")
@@ -183,6 +168,30 @@ function playAgainDiv() {
     document.querySelector('#user-input').remove()
 }
 
+function resetState(snippet) {
+
+    
+    play = true
+    focusedWordIndex = 0
+    focusedCharIndex = 0
+    focusedWord = ""
+    focusedChar = ""
+
+    renderedSnippet = []
+    originalSnippet = []
+    inputBuffer = []
+    lastState = []
+
+    correctWords = []
+    greenChar = []
+    redChar = []
+
+    timer = 0
+
+    //Set initial state
+    originalSnippet = snippet.split(" ")
+    renderedSnippet = snippet.split(" ")
+}
 
 let backspaceEvent = (event) => {
     // e.repeat
