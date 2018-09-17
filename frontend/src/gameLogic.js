@@ -1,51 +1,46 @@
-let play = true
+let play                    //Boolean
 
-let focusedWordIndex = 0
-let focusedCharIndex = 0
-let focusedWord = ""
-let focusedChar = ""
+let focusedWordIndex        //Integer
+let focusedCharIndex        //Integer
+let focusedWord             //String
+let focusedChar             //String
 
-let renderedSnippet = []
-let originalSnippet = []
-let inputBuffer = []
-let lastState = []
+let renderedSnippet         //Array
+let originalSnippet         //Array
+let inputBuffer             //Array
+let lastState               //Array
 
-let correctWords = []
-let greenChar = []
-let redChar = []
+let correctWords            //Array
+let greenChar               //Array
+let redChar                 //Array
 
-let timer = 0
+let timer                   //Integer
+
+let userInput               //Node
 
 
 
 function gameLogic(snippet) { 
+    userInput = document.querySelector("#user-input")
+    
     //Reset state everytime page is loaded
-    resetState(snippet)
-    const userInput = document.querySelector("#user-input")
-
-    //Set initial state
-    originalSnippet = snippet.split(" ")
-    renderedSnippet = snippet.split(" ")
-
-
-    //Focus first letter of first word
-    focusedWord = originalSnippet[focusedWordIndex]
-    focusedChar = focusedWord[focusedCharIndex]
+    loadState(snippet)
 
     userInput.addEventListener("keydown", backspaceEvent)
 
     function gameLoop() {
         document.getElementById("user-input").focus()
         if (play) {
-            wordsPerMinute()
             play = gameOver()
+            
+            wordsPerMinute()
+
             if (userInput.value[0] === " ") {
                 userInput.value = userInput.value.substring(1)
                 return
             }
 
-            lastState = inputBuffer
-            inputBuffer = userInput.value.split("")
+            updateState()
 
             //Keeps logic from running when no change occured
             if (lastState.equals(inputBuffer) || userInput.value === "" || lastState.length > inputBuffer.length) {
@@ -53,52 +48,16 @@ function gameLogic(snippet) {
             }
 
             //Limit the number of wrong characters someone can type
-            if (userInput.value.length > focusedWord.length) {
-                inputBuffer = inputBuffer.slice(0, focusedWord.length)
-                limitInputSize(userInput, focusedWord.length)
-                return
-            }
+            wrongCharLimit()
 
             if ((inputBuffer.join("")) === focusedWord) {
-                //Update visual state
-                correctWords.push(focusedWord)
-                renderedSnippet.shift()
-
-                //Reset state
-                inputBuffer = []
-                greenChar = []
-
-                //Focus first letter of next word
-                ++focusedWordIndex
-                if (focusedWordIndex > originalSnippet.length - 1) {
-                    focusedWordIndex = originalSnippet.length - 1
-                }
-                focusedWord = originalSnippet[focusedWordIndex]
-                focusedCharIndex = 0
-                focusedChar = focusedWord[focusedCharIndex]
-
-                renderBoard()
-                userInput.value = ""
+                wordIsCorrect()
             }
             else if (inputBuffer[inputBuffer.length - 1] === focusedChar && redChar.length === 0) { //user types correct letter
-                greenChar.push(focusedChar)
-                renderedSnippet[0] = renderedSnippet[0].substring(1)
-                focusedChar = focusedWord[++focusedCharIndex]
-
-                renderBoard()
+                letterIsCorrect()
             }
             else if ((inputBuffer[inputBuffer.length - 1] !== focusedChar || redChar.length !== 0) && inputBuffer.length <= focusedWord.length) { //user types wrong letter
-                redChar.push(focusedChar)
-                if (renderedSnippet[0] !== "") {
-                    renderedSnippet[0] = renderedSnippet[0].substring(1)
-                }
-                focusedCharIndex++
-                if (focusedCharIndex > focusedWord.length) {
-                    focusCharIndex = focusedWord.length - 1
-                }
-                focusedChar = focusedWord[focusedCharIndex]
-
-                renderBoard()
+                letterIsIncorrect()
             }
         }
     }
@@ -146,8 +105,6 @@ function gameOver() {
     return result
 }
 
-//words per minutes modal
-
 function playAgainDiv() {
     let results = document.querySelector("#results")
     let wpm = document.createElement("p")
@@ -168,9 +125,7 @@ function playAgainDiv() {
     document.querySelector('#user-input').remove()
 }
 
-function resetState(snippet) {
-
-    
+function loadState(snippet) {
     play = true
     focusedWordIndex = 0
     focusedCharIndex = 0
@@ -191,6 +146,67 @@ function resetState(snippet) {
     //Set initial state
     originalSnippet = snippet.split(" ")
     renderedSnippet = snippet.split(" ")
+
+    //Focus first letter of first word
+    focusedWord = originalSnippet[focusedWordIndex]
+    focusedChar = focusedWord[focusedCharIndex]
+}
+
+function updateState() {
+    lastState = inputBuffer
+    inputBuffer = userInput.value.split("")
+}
+
+function wrongCharLimit() {
+    if (userInput.value.length > focusedWord.length) {
+        inputBuffer = inputBuffer.slice(0, focusedWord.length)
+        limitInputSize(userInput, focusedWord.length)
+        return
+    }
+}
+
+function wordIsCorrect() {
+    //Update visual state
+    correctWords.push(focusedWord)
+    renderedSnippet.shift()
+
+    //Reset state
+    inputBuffer = []
+    greenChar = []
+
+    //Focus first letter of next word
+    ++focusedWordIndex
+    if (focusedWordIndex > originalSnippet.length - 1) {
+        focusedWordIndex = originalSnippet.length - 1
+    }
+    focusedWord = originalSnippet[focusedWordIndex]
+    focusedCharIndex = 0
+    focusedChar = focusedWord[focusedCharIndex]
+
+    renderBoard()
+    userInput.value = ""
+}
+
+function letterIsCorrect() {
+    greenChar.push(focusedChar)
+    renderedSnippet[0] = renderedSnippet[0].substring(1)
+    focusedChar = focusedWord[++focusedCharIndex]
+
+    renderBoard()
+}
+
+function letterIsIncorrect() {
+    redChar.push(focusedChar)
+    if (renderedSnippet[0] !== "") {
+        renderedSnippet[0] = renderedSnippet[0].substring(1)
+    }
+    focusedCharIndex++
+    if (focusedCharIndex > focusedWord.length) {
+        focusCharIndex = focusedWord.length - 1
+    }
+    focusedChar = focusedWord[focusedCharIndex]
+
+    renderBoard()
 }
 
 let backspaceEvent = (event) => {
