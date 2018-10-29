@@ -26,7 +26,7 @@ Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c6
 ## Authors
 
 * **Gabriel Batista** - *Initial work* - [Gabriel-Batista](https://github.com/Gabriel-Batista)
-* **Kevin Reveira** - *Initial work* 
+* **Kevin Rivera** - *Initial work* - [Kevin-Rivera] (https://github.com/krivera1015)
 
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
