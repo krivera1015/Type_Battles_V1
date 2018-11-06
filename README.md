@@ -36,6 +36,5 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ## Acknowledgments
 
-* (Inspiration) https://www.pixilart.com/draw
-* (Inspiration) https://make8bitart.com/
+* (Inspiration) https://play.typeracer.com/
 
