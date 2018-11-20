@@ -6,7 +6,7 @@ A fresh take on improving your typing speed, compete against friends and see who
 
 1. Clone or download the project to your computer.
 2. Open your terminal and navigate to the frontend folder by typing `cd ./frontend` 
-3. Type `npm install && npm start` to start your server.
+3. Type `open index.html` to start your server.
 
 To run backend server check link below:
 
